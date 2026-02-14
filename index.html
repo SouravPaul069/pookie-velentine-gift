@@ -1,51 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>For My Pookie ❤️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>for my pooke  💖</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: "Comic Sans MS", cursive;
+}
+
+body{
+  min-height:100vh;
+  background: linear-gradient(135deg,#ffd6e8,#ffe6f5,#e0f7ff);
+  overflow-x:hidden;
+  padding:40px 15px;
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+header h1{
+  font-size:clamp(26px,5vw,40px);
+  color:#ff4da6;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+  100%{transform:translateY(0);}
+}
+
+/* NOTES */
+.notes{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+  max-width:600px;
+  margin:auto;
+}
+
+.note{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  font-size:clamp(16px,4vw,20px);
+  line-height:1.7;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  animation:fadeUp 0.8s ease forwards;
+}
+
+.note strong{
+  color:#ff4da6;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* DRAG AREA */
+.drag-area{
+  margin-top:60px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.card{
+  width:150px;
+  height:200px;
+  border-radius:20px;
+  overflow:hidden;
+  position:relative;
+  cursor:grab;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  touch-action:none;
+  transition:0.3s ease;
+}
+
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.card.dragging{
+  box-shadow:0 0 25px rgba(255,77,166,0.7);
+  transform:scale(1.05);
+}
+
+/* SECRET NOTE */
+.secret{
+  margin-top:50px;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+  background:#fff0f7;
+  padding:25px;
+  border-radius:20px;
+  font-size:clamp(16px,4vw,20px);
+  line-height:1.7;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.6s ease;
+}
+
+.secret.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media(max-width:600px){
+  .card{
+    width:120px;
+    height:170px;
+  }
+}
+</style>
 </head>
 <body>
 
-<div class="bg-hearts"></div>
+<header>
+  <h1>This is for you my sweet velentine 🌸💖✨</h1>
+</header>
 
-<h1 class="title">For My Pookie 🥹💖</h1>
+<section class="notes">
+  <div class="note">
+    💌 Every moment feels softer when you are around.  
+    The world becomes warmer, brighter, and just a little more magical ✨
+  </div>
 
-<!-- Photo Notes -->
-<div class="paper image">
-  <p>You make my world brighter ☀️💛</p>
-  <img src="pookie.jpg.jpeg" alt="Pookie 1">
+  <div class="note">
+    🌷 Life is better with laughter, late night talks, and random cute memories.
+    Let’s keep collecting them forever 💕
+  </div>
+
+  <div class="note">
+    💖 Some people don’t just enter our life…  
+    They become our comfort, our calm, our happiness.
+    <br><br>
+    <strong>With love,  
+    From Sourav 💌</strong>
+  </div>
+</section>
+
+<section class="drag-area">
+  <div class="card"><img src="pookie.jpg.jpeg"></div>
+  <div class="card"><img src="pookie2.jpg.jpeg"></div>
+  <div class="card"><img src="pookie3.jpg.jpeg"></div>
+</section>
+
+<div class="secret" id="secretMessage">
+  🌹 If you dragged these photos…  
+  it means you were curious enough to look deeper.  
+
+  And that’s what makes you special.  
+
+  Not everyone looks beyond the surface —  
+  but you do.  
+
+  Maybe that’s why this page exists.  
+  Maybe that’s why I exist here too. I Love You Pookiee💖✨ 
+
+  <div class="love-line">
+                                             _your Bebo💖✨
+  </div>
 </div>
+<script>
+let highestZ = 1;
+let revealed = false;
 
-<div class="paper image">
-  <p>Your smile is my favorite 😍</p>
-  <img src="pookie2.jpg.jpeg" alt="Pookie 2">
-</div>
+class Draggable {
+  constructor(element){
+    this.el = element;
+    this.holding = false;
+    this.currentX = 0;
+    this.currentY = 0;
+    this.prevX = 0;
+    this.prevY = 0;
+    this.init();
+  }
 
-<div class="paper image">
-  <p>Forever my cutie 🫶✨</p>
-  <img src="pookie3.jpg.jpeg" alt="Pookie 3">
-</div>
+  init(){
+    const move = (x,y)=>{
+      if(!this.holding) return;
 
-<!-- Love Message -->
-<div class="paper red">
-  <p>I fall in love with you</p>
-  <p>every single day 💌❤️</p>
-</div>
+      const dx = x - this.prevX;
+      const dy = y - this.prevY;
 
-<!-- Special Sourav Note -->
-<div class="paper signature">
-  <p>This heart belongs to you 💖</p>
-  <p class="name">— Sourav 🥰</p>
-</div>
+      this.currentX += dx;
+      this.currentY += dy;
 
-<!-- Drag Instruction -->
-<div class="paper">
-  <p>Drag these notes 💕</p>
-  <p>and feel my love 🥰</p>
-</div>
+      this.prevX = x;
+      this.prevY = y;
 
-<script src="script.js"></script>
+      this.el.style.transform =
+        `translate(${this.currentX}px, ${this.currentY}px) rotate(${this.currentX/20}deg)`;
+
+      if(!revealed){
+        document.getElementById("secretMessage").classList.add("show");
+        revealed = true;
+      }
+    };
+
+    document.addEventListener("mousemove",(e)=>{
+      move(e.clientX,e.clientY);
+    });
+
+    document.addEventListener("touchmove",(e)=>{
+      move(e.touches[0].clientX,e.touches[0].clientY);
+    },{passive:false});
+
+    this.el.addEventListener("mousedown",(e)=>{
+      this.holding=true;
+      this.el.style.zIndex = highestZ++;
+      this.prevX=e.clientX;
+      this.prevY=e.clientY;
+      this.el.classList.add("dragging");
+    });
+
+    this.el.addEventListener("touchstart",(e)=>{
+      this.holding=true;
+      this.el.style.zIndex = highestZ++;
+      this.prevX=e.touches[0].clientX;
+      this.prevY=e.touches[0].clientY;
+      this.el.classList.add("dragging");
+    });
+
+    window.addEventListener("mouseup",()=>{
+      this.holding=false;
+      this.el.classList.remove("dragging");
+    });
+
+    window.addEventListener("touchend",()=>{
+      this.holding=false;
+      this.el.classList.remove("dragging");
+    });
+  }
+}
+
+document.querySelectorAll(".card").forEach(card=>{
+  new Draggable(card);
+});
+</script>
+
 </body>
 </html>
