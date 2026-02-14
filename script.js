@@ -35,11 +35,15 @@ class Paper {
     this.el = el;
     this.prevX = 0;
     this.prevY = 0;
-    this.currentX = 0;
-    this.currentY = 0;
+
+    // Random start position (scattered look)
+    this.currentX = Math.random() * window.innerWidth - window.innerWidth / 2;
+    this.currentY = Math.random() * window.innerHeight - window.innerHeight / 2;
+
     this.rotation = Math.random() * 30 - 15;
 
-    this.el.style.transform = `rotate(${this.rotation}deg)`;
+    this.el.style.transform =
+      `translate(${this.currentX}px, ${this.currentY}px) rotate(${this.rotation}deg)`;
 
     this.init();
   }
@@ -53,6 +57,7 @@ class Paper {
     });
 
     this.el.addEventListener("touchstart", (e) => {
+      e.preventDefault();
       activePaper = this;
       this.el.style.zIndex = highestZ++;
       this.prevX = e.touches[0].clientX;
