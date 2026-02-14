@@ -8,15 +8,24 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   position: relative;
 }
 
-/* Floating hearts animation */
-.floating-hearts::before {
-  content: "❤️ 💖 💕 💘 💗 💓 ❤️ 💞";
+/* Title */
+.title {
+  position: absolute;
+  top: 20px;
+  color: white;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Floating background hearts */
+.bg-hearts::before {
+  content: "❤️ 💖 💕 💘 💗 💞 💓";
   position: absolute;
   font-size: 30px;
-  animation: floatHearts 12s linear infinite;
+  animation: floatHearts 15s linear infinite;
 }
 
 @keyframes floatHearts {
@@ -24,26 +33,14 @@ body {
   100% { top: -100px; }
 }
 
-/* Cute GIF */
-.gif-container {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-.gif-container img {
-  width: 120px;
-  border-radius: 20px;
-}
-
-/* Paper styling */
+/* Paper Styling */
 .paper {
   position: absolute;
-  width: 250px;
-  padding: 20px;
+  width: 260px;
+  padding: 15px;
   background: white;
   border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
   cursor: grab;
   user-select: none;
   transition: transform 0.1s ease;
@@ -53,41 +50,26 @@ body {
   cursor: grabbing;
 }
 
+.paper p {
+  margin: 5px 0;
+  text-align: center;
+  font-size: 16px;
+}
+
 .paper.red {
   background: #ff4d6d;
   color: white;
 }
 
-.paper p {
-  margin: 0;
-  font-size: 18px;
-  text-align: center;
+/* Image styling */
+.paper.image img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
 }
 
-/* Heart shape */
-.heart {
-  width: 100px;
-  height: 100px;
-  background: red;
-  transform: rotate(45deg);
-}
-
-.heart::before,
-.heart::after {
-  content: "";
-  width: 100px;
-  height: 100px;
-  background: red;
-  border-radius: 50%;
-  position: absolute;
-}
-
-.heart::before {
-  top: -50px;
-  left: 0;
-}
-
-.heart::after {
-  left: -50px;
-  top: 0;
+.paper.image img:hover {
+  transform: scale(1.05);
 }
