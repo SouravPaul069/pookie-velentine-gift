@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>for my pooke  💖</title>
+<title>for my pooke 💖</title>
 
 <style>
 *{
@@ -120,6 +120,45 @@ header h1{
   transform:translateY(0);
 }
 
+/* HEARTBEAT */
+.heartbeat{
+  display:inline-block;
+  animation:heartbeat 1.5s infinite;
+  font-weight:bold;
+  color:#ff4da6;
+}
+
+@keyframes heartbeat{
+  0%{transform:scale(1);}
+  25%{transform:scale(1.1);}
+  50%{transform:scale(1);}
+  75%{transform:scale(1.15);}
+  100%{transform:scale(1);}
+}
+
+/* COUNTER */
+.counter-box{
+  margin-top:25px;
+  padding:20px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 8px 20px rgba(255,77,166,0.3);
+  text-align:center;
+}
+
+.counter-title{
+  font-size:14px;
+  color:#888;
+  margin-bottom:8px;
+}
+
+.counter-time{
+  font-size:clamp(18px,4vw,24px);
+  font-weight:bold;
+  color:#ff4da6;
+}
+
+/* MOBILE */
 @media(max-width:600px){
   .card{
     width:120px;
@@ -131,7 +170,7 @@ header h1{
 <body>
 
 <header>
-  <h1>This is for you my sweet velentine 🌸💖✨</h1>
+  <h1>This is for you my sweet valentine 🌸💖✨</h1>
 </header>
 
 <section class="notes">
@@ -146,18 +185,13 @@ header h1{
   </div>
 
   <div class="note">
-  💖 Some people don’t just enter our life…  
-  They become our comfort, our calm, our happiness.  
-
-  And sometimes, just like these photos below,  
-  you have to move things a little  
-  to discover something even more special hidden inside.  
-
-  <br><br>
-  <strong>With love,  
-  From Sourav 💌</strong>
-</div>
-
+    💖 Some people don’t just enter our life…  
+    They become our comfort, our calm, our happiness.
+    And maybe… try dragging the photos below.
+    Sometimes surprises are waiting there too. 💕
+    <br><br>
+    <strong>With love, From Sourav 💌</strong>
+  </div>
 </section>
 
 <section class="drag-area">
@@ -176,15 +210,27 @@ header h1{
   but you do.  
 
   Maybe that’s why this page exists.  
-  Maybe that’s why I exist here too. I Love You Pookiee💖✨ 
+  Maybe that’s why I exist here too.  
+
+  <br><br>
+  <span class="heartbeat">I Love You Pookiee 💖✨</span>
 
   <div class="love-line">
-                                             _your Bebo💖✨
+    _your Bebo💖✨
+  </div>
+
+  <div class="counter-box">
+    <div class="counter-title">
+      💕 Counting every moment since we first talked — January 22, 2022 at 3:00 PM
+    </div>
+    <div class="counter-time" id="loveCounter"></div>
   </div>
 </div>
+
 <script>
 let highestZ = 1;
 let revealed = false;
+let counterStarted = false;
 
 class Draggable {
   constructor(element){
@@ -216,6 +262,12 @@ class Draggable {
       if(!revealed){
         document.getElementById("secretMessage").classList.add("show");
         revealed = true;
+
+        if(!counterStarted){
+          updateCounter();
+          setInterval(updateCounter,1000);
+          counterStarted = true;
+        }
       }
     };
 
@@ -258,8 +310,24 @@ class Draggable {
 document.querySelectorAll(".card").forEach(card=>{
   new Draggable(card);
 });
+
+function updateCounter(){
+  const startDate = new Date("2022-01-22T15:00:00");
+  const now = new Date();
+  const diff = now - startDate;
+
+  const days = Math.floor(diff/(1000*60*60*24));
+  const hours = Math.floor((diff/(1000*60*60))%24);
+  const minutes = Math.floor((diff/(1000*60))%60);
+  const seconds = Math.floor((diff/1000)%60);
+
+  document.getElementById("loveCounter").innerHTML =
+    days + " Days 💞<br>" +
+    hours + " Hours 💖 " +
+    minutes + " Minutes 💘 " +
+    seconds + " Seconds ✨";
+}
 </script>
 
 </body>
 </html>
-
